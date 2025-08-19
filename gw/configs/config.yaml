@@ -1,0 +1,4 @@
+gateway:
+  port: 443
+routes:
+clusters:
