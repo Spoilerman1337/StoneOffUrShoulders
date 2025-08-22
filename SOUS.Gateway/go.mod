@@ -1,4 +1,4 @@
-module gw
+module gateway
 
 go 1.22
 
