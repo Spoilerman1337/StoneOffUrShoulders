@@ -1,0 +1,15 @@
+router:
+  routes:
+    - clusterId: "testCluster"
+      mask: "/api/*rest"
+      methods: ["GET", "POST"]
+  clusters:
+    - name: "testCluster"
+      destinations:
+        - url: "http://localhost:8080/"
+        - url: "http://localhost:8081/"
+      loadBalancer: "LeastConnections"
+    - name: "testCluster2"
+      destinations:
+        - url: "http://localhost:8080/"
+        - url: "http://localhost:8081/"
