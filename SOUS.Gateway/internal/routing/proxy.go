@@ -2,7 +2,7 @@ package routing
 
 import (
 	"fmt"
-	"gateway/internal/config"
+	"gateway/internal/shared"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httputil"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func initProxy(g *gin.Engine, routes []*config.Route, clusters []*config.Cluster) {
+func initProxy(g *gin.Engine, routes []*shared.Route, clusters []*shared.Cluster) {
 	for _, route := range routes {
 		cl, err := findCluster(clusters, route.ClusterId)
 		if err != nil {
@@ -33,7 +33,7 @@ func initProxy(g *gin.Engine, routes []*config.Route, clusters []*config.Cluster
 	}
 }
 
-func findCluster(clusters []*config.Cluster, clusterId string) (*config.Cluster, error) {
+func findCluster(clusters []*shared.Cluster, clusterId string) (*shared.Cluster, error) {
 	for _, cluster := range clusters {
 		if cluster.Name == clusterId {
 			return cluster, nil

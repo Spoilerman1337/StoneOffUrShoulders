@@ -2,11 +2,11 @@ package routing
 
 import (
 	"fmt"
-	"gateway/internal/config"
+	"gateway/internal/shared"
 )
 
-func ensureClusterUniqueness(clusters []*config.Cluster) {
-	dict := make(map[string]*config.Cluster)
+func ensureClusterUniqueness(clusters []*shared.Cluster) {
+	dict := make(map[string]*shared.Cluster)
 	for _, cluster := range clusters {
 		value, ok := dict[cluster.Name]
 		if !ok {
@@ -17,8 +17,8 @@ func ensureClusterUniqueness(clusters []*config.Cluster) {
 	}
 }
 
-func ensureRouteUniqueness(routes []*config.Route) {
-	dict := make(map[string]*config.Route)
+func ensureRouteUniqueness(routes []*shared.Route) {
+	dict := make(map[string]*shared.Route)
 	for _, routes := range routes {
 		value, ok := dict[routes.Mask]
 		if !ok {
