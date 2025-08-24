@@ -7,6 +7,6 @@ type ServerConfig struct {
 }
 
 type RouterConfig struct {
-	Routes   []*shared.Route   `yaml:"routes"`
-	Clusters []*shared.Cluster `yaml:"clusters"`
+	Routes   []*shared.Route            `yaml:"routes"`
+	Clusters map[string]*shared.Cluster `yaml:"clusters"`
 }

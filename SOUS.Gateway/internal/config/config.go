@@ -6,17 +6,19 @@ import (
 )
 
 func InitServerConfiguration() ServerConfig {
-	viper.SetDefault("server.port", 8080)
-	viper.SetConfigName("server")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("configs")
-	errRead := viper.ReadInConfig()
+	v := viper.New()
+
+	v.SetDefault("server.port", 8080)
+	v.SetConfigName("server")
+	v.SetConfigType("json")
+	v.AddConfigPath("configs")
+	errRead := v.ReadInConfig()
 	if errRead != nil {
 		panic(fmt.Errorf("ошибка инициализации: %w", errRead))
 	}
 
 	var config ServerConfig
-	errUnmarshal := viper.UnmarshalKey("server", &config)
+	errUnmarshal := v.UnmarshalKey("server", &config)
 	if errUnmarshal != nil {
 		panic(fmt.Errorf("ошибка инициализации: %w", errUnmarshal))
 	}
@@ -25,20 +27,33 @@ func InitServerConfiguration() ServerConfig {
 }
 
 func InitRouterConfiguration() RouterConfig {
-	viper.SetDefault("router.routes.methods", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"})
-	viper.SetDefault("router.clusters.loadBalancer", "RoundRobin")
-	viper.SetConfigName("router")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("configs")
-	errRead := viper.ReadInConfig()
+	v := viper.New()
+
+	v.SetConfigName("router")
+	v.SetConfigType("json")
+	v.AddConfigPath("configs")
+	errRead := v.ReadInConfig()
 	if errRead != nil {
 		panic(fmt.Errorf("ошибка инициализации: %w", errRead))
 	}
 
 	var config RouterConfig
-	errUnmarshal := viper.UnmarshalKey("router", &config)
+	errUnmarshal := v.UnmarshalKey("router", &config)
 	if errUnmarshal != nil {
 		panic(fmt.Errorf("ошибка инициализации: %w", errUnmarshal))
+	}
+
+	// К сожалению, viper не может установить конфиг по умолчанию внутри массива,
+	// поэтому мы вынуждены доинициализировать вручную
+	for _, route := range config.Routes {
+		if len(route.Methods) == 0 {
+			route.Methods = []string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"}
+		}
+	}
+	for _, cluster := range config.Clusters {
+		if len(cluster.LoadBalancer) == 0 {
+			cluster.LoadBalancer = "RoundRobin"
+		}
 	}
 
 	return config

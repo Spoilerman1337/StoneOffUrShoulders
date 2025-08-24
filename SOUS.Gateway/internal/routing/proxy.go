@@ -1,7 +1,6 @@
 package routing
 
 import (
-	"fmt"
 	"gateway/internal/shared"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,11 +9,11 @@ import (
 	"strings"
 )
 
-func initProxy(g *gin.Engine, routes []*shared.Route, clusters []*shared.Cluster) {
+func initProxy(g *gin.Engine, routes []*shared.Route, clusters map[string]*shared.Cluster) {
 	for _, route := range routes {
-		cl, err := findCluster(clusters, route.ClusterId)
-		if err != nil {
-			panic(err)
+		cl, ok := clusters[route.ClusterId]
+		if !ok {
+			panic("cluster id not exist")
 		}
 
 		targetUrl, _ := url.Parse(cl.Destinations[0].Url)
@@ -27,18 +26,10 @@ func initProxy(g *gin.Engine, routes []*shared.Route, clusters []*shared.Cluster
 			req.URL.Path = transformedUrl
 		}
 
-		g.Any(route.Mask, func(c *gin.Context) {
-			proxy.ServeHTTP(c.Writer, c.Request)
-		})
-	}
-}
-
-func findCluster(clusters []*shared.Cluster, clusterId string) (*shared.Cluster, error) {
-	for _, cluster := range clusters {
-		if cluster.Name == clusterId {
-			return cluster, nil
+		for _, method := range route.Methods {
+			g.Handle(method, route.Mask, func(c *gin.Context) {
+				proxy.ServeHTTP(c.Writer, c.Request)
+			})
 		}
 	}
-
-	return nil, fmt.Errorf("кластер с id %s не найден", clusterId)
 }
