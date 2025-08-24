@@ -7,7 +7,6 @@ type Route struct {
 }
 
 type Cluster struct {
-	Name         string               `yaml:"name"`
 	Destinations []*Destination       `yaml:"destinations"`
 	LoadBalancer LoadBalancerStrategy `yaml:"loadBalancer"`
 }

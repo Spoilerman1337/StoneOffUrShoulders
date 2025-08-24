@@ -1,0 +1,30 @@
+{
+  "router": {
+    "routes": [
+      {
+        "clusterId": "testcluster",
+        "mask": "/api/service1/v2/*rest",
+        "methods": ["GET", "POST"]
+      },
+      {
+        "clusterId": "testcluster2",
+        "mask": "/api/service1/v2/*rest"
+      }
+    ],
+    "clusters": {
+      "testcluster": {
+        "destinations": [
+          {"url": "http://localhost:8080/"},
+          {"url": "http://localhost:8081/"}
+        ],
+        "loadBalancer": "LeastConnections"
+      },
+      "testcluster2": {
+        "destinations": [
+          {"url": "http://localhost:8080/"},
+          {"url": "http://localhost:8081/"}
+        ]
+      }
+    }
+  }
+}
