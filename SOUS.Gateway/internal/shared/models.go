@@ -18,7 +18,10 @@ type Destination struct {
 type LoadBalancerStrategy string
 
 const (
-	RoundRobin       LoadBalancerStrategy = "RoundRobin"
-	LeastConnections LoadBalancerStrategy = "LeastConnections"
-	Random           LoadBalancerStrategy = "Random"
+	RoundRobin               LoadBalancerStrategy = "RoundRobin"
+	WeightedRoundRobin       LoadBalancerStrategy = "WeightedRoundRobin"
+	LeastConnections         LoadBalancerStrategy = "LeastConnections"
+	WeightedLeastConnections LoadBalancerStrategy = "WeightedLeastConnections"
+	IPHash                   LoadBalancerStrategy = "IPHash"
+	Random                   LoadBalancerStrategy = "Random"
 )

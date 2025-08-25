@@ -1,6 +1,8 @@
 package routing
 
 import (
+	"fmt"
+	"gateway/internal/load_balancer"
 	"gateway/internal/shared"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,8 +28,16 @@ func initProxy(g *gin.Engine, routes []*shared.Route, clusters map[string]*share
 			req.URL.Path = transformedUrl
 		}
 
+		lb, err := load_balancer.GetLoadBalancer(cl)
+		if err != nil {
+			panic(err)
+		}
+
 		for _, method := range route.Methods {
 			g.Handle(method, route.Mask, func(c *gin.Context) {
+				newUrl := lb.Next()
+				fmt.Println(fmt.Sprintf("Loadbalancer chose url: %s", newUrl))
+
 				proxy.ServeHTTP(c.Writer, c.Request)
 			})
 		}
