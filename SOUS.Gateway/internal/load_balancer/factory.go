@@ -10,7 +10,7 @@ type LoadBalancer interface {
 }
 
 var balancers = map[shared.LoadBalancerStrategy]func(cluster *shared.Cluster) LoadBalancer{
-	"RoundRobin":       nil,
+	"RoundRobin":       NewRoundRobinLoadBalancer,
 	"LeastConnections": nil,
 	"Random":           NewRandomLoadBalancer,
 }
