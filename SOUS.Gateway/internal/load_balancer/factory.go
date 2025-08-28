@@ -3,16 +3,18 @@ package load_balancer
 import (
 	"fmt"
 	"gateway/internal/shared"
+	"github.com/gin-gonic/gin"
 )
 
 type LoadBalancer interface {
-	Next() string
+	Next(c *gin.Context) string
 }
 
 var balancers = map[shared.LoadBalancerStrategy]func(cluster *shared.Cluster) LoadBalancer{
 	"RoundRobin":       NewRoundRobinLoadBalancer,
 	"LeastConnections": nil,
 	"Random":           NewRandomLoadBalancer,
+	"IPHash":           NewIPHashLoadBalancer,
 }
 
 func GetLoadBalancer(cluster *shared.Cluster) (LoadBalancer, error) {

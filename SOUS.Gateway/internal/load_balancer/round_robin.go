@@ -2,6 +2,7 @@ package load_balancer
 
 import (
 	"gateway/internal/shared"
+	"github.com/gin-gonic/gin"
 	"sync/atomic"
 )
 
@@ -10,7 +11,7 @@ type RoundRobinLoadBalancer struct {
 	Counter      atomic.Int32
 }
 
-func (lb *RoundRobinLoadBalancer) Next() string {
+func (lb *RoundRobinLoadBalancer) Next(c *gin.Context) string {
 	idx := lb.Counter.Add(1)
 
 	return lb.Destinations[int(idx)%len(lb.Destinations)].Url

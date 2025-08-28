@@ -35,7 +35,7 @@ func initProxy(g *gin.Engine, routes []*shared.Route, clusters map[string]*share
 
 		for _, method := range route.Methods {
 			g.Handle(method, route.Mask, func(c *gin.Context) {
-				newUrl := lb.Next()
+				newUrl := lb.Next(c)
 				fmt.Println(fmt.Sprintf("Loadbalancer chose url: %s", newUrl))
 
 				proxy.ServeHTTP(c.Writer, c.Request)

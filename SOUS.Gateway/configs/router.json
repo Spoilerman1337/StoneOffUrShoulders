@@ -18,7 +18,7 @@
           {"url": "http://localhost:8080/"},
           {"url": "http://localhost:8081/"}
         ],
-        "loadBalancer": "Random"
+        "loadBalancer": "IPHash"
       },
       "testcluster2": {
         "destinations": [
