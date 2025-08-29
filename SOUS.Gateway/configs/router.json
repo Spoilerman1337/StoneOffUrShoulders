@@ -15,15 +15,24 @@
     "clusters": {
       "testcluster": {
         "destinations": [
-          {"url": "http://localhost:8080/"},
-          {"url": "http://localhost:8081/"}
+          {
+            "url": "http://localhost:8080/",
+            "weight": 2
+          },
+          {
+            "url": "http://localhost:8081/"
+          }
         ],
         "loadBalancer": "IPHash"
       },
       "testcluster2": {
         "destinations": [
-          {"url": "http://localhost:8080/"},
-          {"url": "http://localhost:8081/"}
+          {
+            "url": "http://localhost:8080/"
+          },
+          {
+            "url": "http://localhost:8081/"
+          }
         ],
         "loadBalancer": "Random"
       }

@@ -12,7 +12,8 @@ type Cluster struct {
 }
 
 type Destination struct {
-	Url string `yaml:"url"`
+	Url    string `yaml:"url"`
+	Weight int    `yaml:"weight"`
 }
 
 type LoadBalancerStrategy string

@@ -33,13 +33,17 @@ func initProxy(g *gin.Engine, routes []*shared.Route, clusters map[string]*share
 			panic(err)
 		}
 
-		for _, method := range route.Methods {
-			g.Handle(method, route.Mask, func(c *gin.Context) {
-				newUrl := lb.Next(c)
-				fmt.Println(fmt.Sprintf("Loadbalancer chose url: %s", newUrl))
+		handleRequest(route, lb, g, proxy)
+	}
+}
 
-				proxy.ServeHTTP(c.Writer, c.Request)
-			})
-		}
+func handleRequest(route *shared.Route, lb load_balancer.LoadBalancer, g *gin.Engine, proxy *httputil.ReverseProxy) {
+	for _, method := range route.Methods {
+		g.Handle(method, route.Mask, func(c *gin.Context) {
+			newUrl := lb.Next(c)
+			fmt.Println(fmt.Sprintf("Loadbalancer chose url: %s", newUrl))
+
+			proxy.ServeHTTP(c.Writer, c.Request)
+		})
 	}
 }
