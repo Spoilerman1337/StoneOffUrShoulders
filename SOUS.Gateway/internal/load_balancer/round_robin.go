@@ -11,10 +11,10 @@ type RoundRobinLoadBalancer struct {
 	Counter      atomic.Int32
 }
 
-func (lb *RoundRobinLoadBalancer) Next(c *gin.Context) string {
+func (lb *RoundRobinLoadBalancer) Next(c *gin.Context) *shared.Destination {
 	idx := lb.Counter.Add(1)
 
-	return lb.Destinations[int(idx)%len(lb.Destinations)].Url
+	return lb.Destinations[int(idx)%len(lb.Destinations)]
 }
 
 func NewRoundRobinLoadBalancer(cluster *shared.Cluster) LoadBalancer {

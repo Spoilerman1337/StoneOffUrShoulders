@@ -7,15 +7,16 @@ import (
 )
 
 type LoadBalancer interface {
-	Next(c *gin.Context) string
+	Next(c *gin.Context) *shared.Destination
 }
 
 var balancers = map[shared.LoadBalancerStrategy]func(cluster *shared.Cluster) LoadBalancer{
-	"RoundRobin":         NewRoundRobinLoadBalancer,
-	"WeightedRoundRobin": NewWeightedRoundRobinLoadBalancer,
-	"LeastConnections":   nil,
-	"Random":             NewRandomLoadBalancer,
-	"IPHash":             NewIPHashLoadBalancer,
+	"RoundRobin":            NewRoundRobinLoadBalancer,
+	"WeightedRoundRobin":    NewWeightedRoundRobinLoadBalancer,
+	"LeastRequests":         NewLeastRequestsBalancer,
+	"WeightedLeastRequests": nil,
+	"Random":                NewRandomLoadBalancer,
+	"IPHash":                NewIPHashLoadBalancer,
 }
 
 func GetLoadBalancer(cluster *shared.Cluster) (LoadBalancer, error) {

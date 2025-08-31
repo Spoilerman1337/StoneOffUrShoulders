@@ -1,7 +1,6 @@
 package load_balancer
 
 import (
-	"fmt"
 	"gateway/internal/shared"
 	"github.com/gin-gonic/gin"
 	"hash/fnv"
@@ -11,7 +10,7 @@ type IPHashLoadBalancer struct {
 	Destinations []*shared.Destination
 }
 
-func (lb *IPHashLoadBalancer) Next(c *gin.Context) string {
+func (lb *IPHashLoadBalancer) Next(c *gin.Context) *shared.Destination {
 	hash := fnv.New32a()
 	hashLen, _ := hash.Write([]byte(c.ClientIP()))
 	var val int
@@ -19,9 +18,7 @@ func (lb *IPHashLoadBalancer) Next(c *gin.Context) string {
 		val = int(hash.Sum32())
 	}
 
-	fmt.Printf("Hash: %d. IP: %s", val, c.ClientIP())
-
-	return lb.Destinations[val%len(lb.Destinations)].Url
+	return lb.Destinations[val%len(lb.Destinations)]
 }
 
 func NewIPHashLoadBalancer(cluster *shared.Cluster) LoadBalancer {

@@ -13,7 +13,7 @@ type WeightedRoundRobinLoadBalancer struct {
 	Mutex         sync.Mutex
 }
 
-func (lb *WeightedRoundRobinLoadBalancer) Next(c *gin.Context) string {
+func (lb *WeightedRoundRobinLoadBalancer) Next(c *gin.Context) *shared.Destination {
 	lb.Mutex.Lock()
 	defer lb.Mutex.Unlock()
 
@@ -28,7 +28,7 @@ func (lb *WeightedRoundRobinLoadBalancer) Next(c *gin.Context) string {
 		idx = lb.Counter
 	}
 
-	return lb.Destinations[idx%len(lb.Destinations)].Url
+	return lb.Destinations[idx%len(lb.Destinations)]
 }
 
 func NewWeightedRoundRobinLoadBalancer(cluster *shared.Cluster) LoadBalancer {
