@@ -14,7 +14,7 @@ var balancers = map[shared.LoadBalancerStrategy]func(cluster *shared.Cluster) Lo
 	"RoundRobin":            NewRoundRobinLoadBalancer,
 	"WeightedRoundRobin":    NewWeightedRoundRobinLoadBalancer,
 	"LeastRequests":         NewLeastRequestsBalancer,
-	"WeightedLeastRequests": nil,
+	"WeightedLeastRequests": NewWeightedLeastRequestsBalancer,
 	"Random":                NewRandomLoadBalancer,
 	"IPHash":                NewIPHashLoadBalancer,
 }
