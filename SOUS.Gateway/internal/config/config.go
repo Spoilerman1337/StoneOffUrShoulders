@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"gateway/internal/shared"
 	"github.com/spf13/viper"
 )
 
@@ -45,16 +46,33 @@ func InitRouterConfiguration() RouterConfig {
 
 	// К сожалению, viper не может установить конфиг по умолчанию внутри массива,
 	// поэтому мы вынуждены доинициализировать вручную
-	for _, route := range config.Routes {
+	setRoutesDefaults(config.Routes)
+	setClustersDefaults(config.Clusters)
+
+	return config
+}
+
+func setRoutesDefaults(routes []*shared.Route) {
+	for _, route := range routes {
 		if len(route.Methods) == 0 {
 			route.Methods = []string{"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"}
 		}
 	}
-	for _, cluster := range config.Clusters {
+}
+
+func setClustersDefaults(clusters map[string]*shared.Cluster) {
+	for _, cluster := range clusters {
 		if len(cluster.LoadBalancer) == 0 {
 			cluster.LoadBalancer = "RoundRobin"
 		}
+		setDestinationDefaults(cluster.Destinations)
 	}
+}
 
-	return config
+func setDestinationDefaults(destinations []*shared.Destination) {
+	for _, destination := range destinations {
+		if destination.Weight == 0 {
+			destination.Weight = 1
+		}
+	}
 }
