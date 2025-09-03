@@ -1,5 +1,10 @@
 {
   "server": {
-    "port": 443
+    "port": 443,
+    "https": true,
+    "rateLimiter": {
+      "limit": 500,
+      "strategy": "FixedWindow"
+    }
   }
 }
