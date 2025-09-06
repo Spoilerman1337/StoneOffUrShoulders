@@ -19,6 +19,12 @@ type Destination struct {
 	activeConnections atomic.Int32 `yaml:"-"`
 }
 
+type RateLimiterConfig struct {
+	Limit    int
+	Strategy RateLimiterStrategy
+	Rate     int64
+}
+
 func (d *Destination) ActiveConnections() int32 {
 	return d.activeConnections.Load()
 }
@@ -32,6 +38,7 @@ func (d *Destination) DecrementConnections() {
 }
 
 type LoadBalancerStrategy string
+type RateLimiterStrategy string
 
 const (
 	RoundRobin            LoadBalancerStrategy = "RoundRobin"
@@ -40,4 +47,11 @@ const (
 	WeightedLeastRequests LoadBalancerStrategy = "WeightedLeastRequests"
 	IPHash                LoadBalancerStrategy = "IPHash"
 	Random                LoadBalancerStrategy = "Random"
+)
+
+const (
+	FixedWindow   RateLimiterStrategy = "FixedWindow"
+	SlidingWindow RateLimiterStrategy = "SlidingWindow"
+	TokenBucket   RateLimiterStrategy = "TokenBucket"
+	LeakyBucket   RateLimiterStrategy = "LeakyBucket"
 )

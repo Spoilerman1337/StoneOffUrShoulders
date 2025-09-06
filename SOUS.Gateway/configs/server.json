@@ -3,8 +3,11 @@
     "port": 443,
     "https": true,
     "rateLimiter": {
-      "limit": 500,
-      "strategy": "FixedWindow"
+      "strategy": "FixedWindow",
+      "options": {
+        "limit": 500,
+        "rate": 60000
+      }
     }
   }
 }
