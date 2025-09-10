@@ -3,7 +3,9 @@ package config
 import "gateway/internal/shared"
 
 type ServerConfig struct {
-	Port string
+	Port        string
+	Https       bool
+	RateLimiter shared.RateLimiterConfig
 }
 
 type RouterConfig struct {
