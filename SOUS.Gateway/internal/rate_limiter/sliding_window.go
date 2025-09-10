@@ -50,3 +50,11 @@ func (rl *SlidingWindowRateLimiter) cleanMap(storage *slidingWindowRequestData, 
 
 	storage.timestamps = newSlice
 }
+
+func NewSlidingWindowRateLimiter(config shared.RateLimiterConfig) RateLimiter {
+	return &SlidingWindowRateLimiter{
+		storage: make(map[string]*slidingWindowRequestData),
+		config:  config,
+		mutex:   sync.Mutex{},
+	}
+}

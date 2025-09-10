@@ -20,9 +20,10 @@ type Destination struct {
 }
 
 type RateLimiterConfig struct {
-	Limit    int
-	Strategy RateLimiterStrategy
-	Rate     int64
+	Limit         int
+	Strategy      RateLimiterStrategy
+	Rate          int64
+	TokensPerRate int
 }
 
 func (d *Destination) ActiveConnections() int32 {

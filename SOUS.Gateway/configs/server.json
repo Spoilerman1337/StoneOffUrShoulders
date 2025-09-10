@@ -6,7 +6,8 @@
       "strategy": "FixedWindow",
       "options": {
         "limit": 500,
-        "rate": 60000
+        "rate": 60000,
+        "tokensPerRate": 5
       }
     }
   }

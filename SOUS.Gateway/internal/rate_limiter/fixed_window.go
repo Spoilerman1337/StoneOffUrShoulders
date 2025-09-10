@@ -59,3 +59,11 @@ func (rl *FixedWindowRateLimiter) Cleanup(interval time.Duration) {
 		}
 	}()
 }
+
+func NewFixedWindowRateLimiter(config shared.RateLimiterConfig) RateLimiter {
+	return &FixedWindowRateLimiter{
+		storage: make(map[string]*fixedWindowRequestData),
+		config:  config,
+		mutex:   sync.Mutex{},
+	}
+}
